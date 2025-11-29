@@ -1,0 +1,63 @@
+// Navoiydagi hotel ma'lumotlari
+const hotels = [
+    {
+        name: "Hotel Maximum",
+        phone: "+998 95 603 00 77",
+        address: "9 Galaba ko'chasi, 210101 Навои, Узбекистан",
+        lat: 40.100, 
+        lng: 65.350
+    },
+    {
+        name: "Hotel Anor Navoiy",
+        phone: "+998 99 747 11 19",
+        address: "Islom Karimov 567, 210100",
+        lat: 40.105,
+        lng: 65.360
+    },
+    {
+        name: "Hotel Hobiz",
+        phone: "+998 78 770 02 21",
+        address: "Mahmud Tarobiy ko'chasi 112",
+        lat: 40.110,
+        lng: 65.370
+    }
+];
+
+// Hotel ro'yxatini sahifaga chiqarish
+const hotelsDiv = document.getElementById('hotels');
+hotels.forEach(hotel => {
+    const div = document.createElement('div');
+    div.className = "hotel";
+    div.innerHTML = `<h3>${hotel.name}</h3>
+                     <p>Telefon: ${hotel.phone}</p>
+                     <p>Manzil: ${hotel.address}</p>`;
+    hotelsDiv.appendChild(div);
+});
+
+// Google Maps yaratish
+function initMap() {
+    const center = {lat: 40.100, lng: 65.350}; // Navoiy markazi
+    const map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 12,
+        center: center
+    });
+
+    hotels.forEach(hotel => {
+        const marker = new google.maps.Marker({
+            position: {lat: hotel.lat, lng: hotel.lng},
+            map: map,
+            title: hotel.name
+        });
+
+        const infoWindow = new google.maps.InfoWindow({
+            content: `<h3>${hotel.name}</h3><p>${hotel.address}</p><p>${hotel.phone}</p>`
+        });
+
+        marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+        });
+    });
+}
+
+// Google Maps API chaqirish
+window.onload = initMap;
